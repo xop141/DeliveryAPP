@@ -50,14 +50,14 @@ const Page = () => {
           food.map((foodItem) => (
             <Dialog
               key={foodItem._id}
-              open={selectedFood?._id === foodItem._id} // Open the dialog only if the foodItem is selected
+              open={selectedFood?._id === foodItem._id} 
               onOpenChange={(open) => { 
-                if (!open) setSelectedFood(null); // Close dialog when open is set to false
+                if (!open) setSelectedFood(null); 
               }}
             >
               <DialogTrigger
                 className="p-4 border rounded-lg shadow-md cursor-pointer hover:bg-gray-100"
-                onClick={() => setSelectedFood(foodItem)} // Set selected food when clicked
+                onClick={() => setSelectedFood(foodItem)} 
               >
                 <div className="bg-black w-[200px] h-[150px]"></div>
                 <h3 className="text-lg font-medium">{foodItem.foodName}</h3>

@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { CldImage } from "next-cloudinary";
+// import { CldImage } from "next-cloudinary";
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation";
 

@@ -11,6 +11,7 @@ import {
   DialogTrigger,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { updateCount, addToCart } from "@/app/utils/addCart";
 
 interface Food {
   _id: string;
@@ -25,6 +26,7 @@ interface Food {
 const Page = () => {
   const [food, setFood] = useState<Food[]>([]);
   const [selectedFood, setSelectedFood] = useState<Food | null>(null);
+  const [count, setCount] = useState(1);
   const param = useParams();
   const id = param.id;
 
@@ -41,6 +43,8 @@ const Page = () => {
       fetchFood();
     }
   }, [id]);
+  const add = () => setCount(updateCount(count, "add"));
+  const minus = () => setCount(updateCount(count, "minus"));
 
   return (
     <div className="p-6 gap-[100px] flex flex-col">
@@ -50,25 +54,48 @@ const Page = () => {
           food.map((foodItem) => (
             <Dialog
               key={foodItem._id}
-              open={selectedFood?._id === foodItem._id} 
-              onOpenChange={(open) => { 
-                if (!open) setSelectedFood(null); 
+              open={selectedFood?._id === foodItem._id}
+              onOpenChange={(open) => {
+                if (!open) setSelectedFood(null);
               }}
             >
               <DialogTrigger
                 className="p-4 border rounded-lg shadow-md cursor-pointer hover:bg-gray-100"
-                onClick={() => setSelectedFood(foodItem)} 
+                onClick={() => setSelectedFood(foodItem)}
               >
                 <div className="bg-black w-[200px] h-[150px]"></div>
                 <h3 className="text-lg font-medium">{foodItem.foodName}</h3>
-                <p className="text-gray-600">${foodItem.price.toFixed(2)}</p>
+                
               </DialogTrigger>
 
               <DialogContent>
                 <DialogHeader>
                   <DialogTitle>{foodItem.foodName}</DialogTitle>
                   <DialogDescription>{foodItem.ingredients}</DialogDescription>
-                  <p className="font-bold text-green-600">${foodItem.price.toFixed(2)}</p>
+                 
+                  <div className="flex justify-between">
+                    <p className="font-bold text-green-600">
+                      ${((foodItem.price ?? 0) * count).toFixed(2)}
+                    </p>
+                    <div className="flex gap-[20px] items-center">
+                      <Button onClick={minus} className="hover:text-red-500">-</Button>
+                      {count}
+                      <Button onClick={add} className="hover:text-red-500">+</Button>
+                    </div>
+                  </div>
+                  <Button
+                    className="mt-4 bg-red-500 hover:bg-red-600"
+                    onClick={() => {
+                      if (selectedFood) {
+                        addToCart(selectedFood._id, selectedFood.foodName, count);
+                        setSelectedFood(null); // Close the dialog after adding to cart
+                      } else {
+                        console.error("No food selected");
+                      }
+                    }}
+                  >
+                    Add to Cart
+                  </Button>
                 </DialogHeader>
               </DialogContent>
             </Dialog>

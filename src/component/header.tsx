@@ -19,16 +19,16 @@ const Header = () => {
         foodName: string;
         quantity: number;
       }
-    const [token, setToken] = useState<string | null>(null); // State to store the token
+    const [token, setToken] = useState<string | null>(null); 
     const router = useRouter();
-    const [cart, setCart] = useState<CartItem[]>([]);
+
     useEffect(() => {
         if (typeof window !== "undefined") {
             const storedToken = window.localStorage.getItem('token');
             setToken(storedToken);
         }
         const storedCart = JSON.parse(localStorage.getItem('cart') || '[]');
-        setCart(storedCart);
+     
 
     }, []);
 
@@ -45,7 +45,7 @@ const Header = () => {
         router.push('/');
     }
 
-    const [activeTab, setActiveTab] = useState<'cart' | 'order'>('order'); // state for tab toggle
+    const [activeTab, setActiveTab] = useState<'cart' | 'order'>('order'); 
 
     const handleTabClick = (tab: 'cart' | 'order') => {
         setActiveTab(tab);

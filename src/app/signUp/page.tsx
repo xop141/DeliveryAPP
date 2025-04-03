@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Progress } from "@/components/ui/progress";
@@ -84,76 +84,74 @@ const SignUp = () => {
   };
 
   return (
-    <div className="h-screen flex items-center justify-center ">
-      <div
-        className="relative w-96 h-160 bg-cover bg-center rounded-lg shadow-xl overflow-hidden"
-        style={{ backgroundImage: "url('https://pexels.imgix.net/photos/27718/pexels-photo-27718.jpg?fit=crop&w=1280&h=823')" }}>
-      
-<div className="absolute inset-0 bg-gradient-to-b from-red-500 via-red-600 to-blue-500 opacity-80"></div>
-        <div className="relative z-10 p-6 flex flex-col items-center">
-          <Progress value={newUser.progress} color="bg-blue-500" />
-          <div className="text-4xl font-thin text-white mt-24 mb-4">Sign up</div>
-          <div className="w-full mb-4">
-            <input
-              type="text"
-              placeholder="Username"
-              className="w-full px-4 py-2 border-b-2 border-white bg-transparent text-white focus:outline-none focus:border-white"
-              value={newUser.name}
-              onChange={(e) => handleChange(e, 'name')}
-            />
-          </div>
-          <div className="w-full mb-4">
-            <input
-              type="email"
-              placeholder="Email"
-              className="w-full px-4 py-2 border-b-2 border-white bg-transparent text-white focus:outline-none focus:border-white"
-              value={newUser.email}
-              onChange={(e) => handleChange(e, 'email')}
-            />
-          </div>
-          <div className="w-full mb-4">
-            <input
-              type="text"
-              placeholder="Phone number"
-              className="w-full px-4 py-2 border-b-2 border-white bg-transparent text-white focus:outline-none focus:border-white"
-              value={newUser.phoneNumber}
-              onChange={(e) => handleChange(e, 'phoneNumber')}
-            />
-          </div>
-          <div className="w-full mb-4">
-            <input
-              type="password"
-              placeholder="Password"
-              className="w-full px-4 py-2 border-b-2 border-white bg-transparent text-white focus:outline-none focus:border-white"
-              value={newUser.password}
-              onChange={(e) => handleChange(e, 'password')}
-            />
-          </div>
-          <div className="w-full mb-4">
-            <input
-              type="password"
-              placeholder="Repeat password"
-              className="w-full px-4 py-2 border-b-2 border-white bg-transparent text-white focus:outline-none focus:border-white"
-              value={newUser.password2}
-              onChange={(e) => handleChange(e, 'password2')}
-            />
-          </div>
-          {msg && <div className="text-red-500 text-sm">{msg}</div>}
-          <div className="text-sm text-white mb-6">
-            or <span className="font-bold cursor-pointer" onClick={() => router.push('/login')}>already have an account</span>
-          </div>
+    <div className="h-screen flex items-center justify-center bg-gray-100 text-gray-900">
+      <div className="relative w-96 z-10 p-8 bg-opacity-80 rounded-lg bg-white shadow-lg">
+        <h2 className="text-3xl font-semibold text-center mb-6">Sign Up</h2>
+        <Progress value={newUser.progress} color="bg-gray-800" className="mb-4" />
 
-          <button
-            className={`w-full py-2 border-2 border-white text-white rounded-full transition duration-300 
-              ${newUser.progress === 100 ? 'bg-black hover:bg-white hover:text-gray-800' : 'cursor-not-allowed'}`}
-            disabled={newUser.progress !== 100} 
-            onClick={createAccount}
-          >
-            Create Account
-          </button>
+        <div className="w-full mb-4">
+          <input
+            type="text"
+            placeholder="Username"
+            className="w-full px-4 py-2 border-b-2 border-gray-800 bg-transparent text-gray-900 focus:outline-none focus:border-gray-900"
+            value={newUser.name}
+            onChange={(e) => handleChange(e, 'name')}
+          />
         </div>
+        <div className="w-full mb-4">
+          <input
+            type="email"
+            placeholder="Email"
+            className="w-full px-4 py-2 border-b-2 border-gray-800 bg-transparent text-gray-900 focus:outline-none focus:border-gray-900"
+            value={newUser.email}
+            onChange={(e) => handleChange(e, 'email')}
+          />
+        </div>
+        <div className="w-full mb-4">
+          <input
+            type="text"
+            placeholder="Phone number"
+            className="w-full px-4 py-2 border-b-2 border-gray-800 bg-transparent text-gray-900 focus:outline-none focus:border-gray-900"
+            value={newUser.phoneNumber}
+            onChange={(e) => handleChange(e, 'phoneNumber')}
+          />
+        </div>
+        <div className="w-full mb-4">
+          <input
+            type="password"
+            placeholder="Password"
+            className="w-full px-4 py-2 border-b-2 border-gray-800 bg-transparent text-gray-900 focus:outline-none focus:border-gray-900"
+            value={newUser.password}
+            onChange={(e) => handleChange(e, 'password')}
+          />
+        </div>
+        <div className="w-full mb-6">
+          <input
+            type="password"
+            placeholder="Repeat password"
+            className="w-full px-4 py-2 border-b-2 border-gray-800 bg-transparent text-gray-900 focus:outline-none focus:border-gray-900"
+            value={newUser.password2}
+            onChange={(e) => handleChange(e, 'password2')}
+          />
+        </div>
+
+        {msg && <div className="text-red-500 text-sm mb-4">{msg}</div>}
+
+        <div className="text-sm text-center mb-6">
+          or <span className="font-bold cursor-pointer" onClick={() => router.push('/login')}>already have an account</span>
+        </div>
+
+        <button
+          className={`w-full py-2 border-2 text-white rounded-full transition duration-300 
+            ${newUser.progress === 100 ? 'bg-black hover:bg-white hover:text-gray-800' : 'opacity-50 cursor-not-allowed'}`}
+          disabled={newUser.progress !== 100}
+          onClick={createAccount}
+        >
+          Create Account
+        </button>
       </div>
     </div>
   );
 };
+
 export default SignUp;

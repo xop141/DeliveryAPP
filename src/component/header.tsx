@@ -5,20 +5,23 @@ import Image from 'next/image'
 import logo from '@/app/img/logo.png'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
-import { ShoppingCart } from 'lucide-react'
+
 import Cart from '@/component/cart'
-import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import Orders from '@/component/order'
-import { LogIn } from 'lucide-react';
-import { UserPlus } from 'lucide-react';
-import { LogOut } from 'lucide-react';
+import { LogIn,UserPlus,LogOut,ShoppingCart } from 'lucide-react';
+
 
 
 const Header = () => {
-
+    interface CartItem {
+        id: string;
+        foodName: string;
+        quantity: number;
+      }
     const [token, setToken] = useState<string | null>(null); // State to store the token
     const router = useRouter();
-    const [cart, setCart] = useState([])
+    const [cart, setCart] = useState<CartItem[]>([]);
     useEffect(() => {
         if (typeof window !== "undefined") {
             const storedToken = window.localStorage.getItem('token');

@@ -6,6 +6,11 @@ import { useRouter } from 'next/navigation';
 import { Trash, CircleMinus, CirclePlus } from 'lucide-react';
 
 const Cart = () => {
+    interface CartItem {
+        id: string;
+        foodName: string;
+        quantity: number;
+      }
   const [isDisabled, setIsDisabled] = useState(false);
   const [data, setData] = useState<any[]>([]);
   const token = localStorage.getItem('token');
@@ -52,7 +57,8 @@ const Cart = () => {
   const updateQuantity = (id: string, action: 'increase' | 'decrease') => {
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
 
-    const updatedCart = cart.map(item => {
+    const updatedCart = cart.map((item: CartItem) => {
+
       if (item.id === id) {
         if (action === 'increase') {
           item.quantity += 1;
@@ -69,7 +75,8 @@ const Cart = () => {
 
   const deleteItem = (id: string) => {
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    const updatedCart = cart.filter(item => item.id !== id);
+    const updatedCart = cart.filter((item: CartItem) => item.id !== id);
+
 
     localStorage.setItem('cart', JSON.stringify(updatedCart));
     setData(updatedCart);

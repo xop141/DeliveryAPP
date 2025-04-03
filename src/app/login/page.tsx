@@ -1,56 +1,27 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { EyeOff, Eye } from "lucide-react";
 import axios from "axios";
+import { EyeOff, Eye } from "lucide-react";
+import { Input } from "@/components/ui/input"; 
 const LoginPage = () => {
   const router = useRouter();
-  const signUp = () => {
-    router.push('/signUp');
-  };
-  const [user, setUser] = useState({
-    email: "",
-    password: ""
-  });
-  const [background, setBackground] = useState(false);
-  const [isShow, setIsshow] = useState(false);
+  const signUp = () => router.push("/signUp");
+  const [user, setUser] = useState({ email: "", password: "" });
+  const [isShow, setIsShow] = useState(false);
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUser(prevState => ({
-      ...prevState,
-      email: e.target.value
-    }));
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setUser((prevState) => ({ ...prevState, [name]: value }));
   };
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUser(prevState => ({
-      ...prevState,
-      password: e.target.value
-    }));
-  };
-  const track = () => {
-    if (user.email.length && user.password.length) {
-      setBackground(true);
-    } else {
-      setBackground(false);
-    }
-  };
-  useEffect(() => {
-    track();
-  }, [user.email, user.password]);
-  const showimg = () => {
-    setIsshow(prevState => !prevState);
-  };
+  const showPassword = () => setIsShow(!isShow);
   const login = async () => {
-    const data = {
-      email: user.email,
-      password: user.password,
-    };
     try {
-      const response = await axios.post("http://localhost:3030/user/login", data);
-      setErrorMessages([]);
-      localStorage.setItem('token', response.data.token);
-      router.push('/');
+      const response = await axios.post("http://localhost:3030/user/login", user);
+      localStorage.setItem("token", response.data.token);
+      router.push("/");
     } catch (error) {
+ 
       if (axios.isAxiosError(error)) {
         const errorResponse = error.response?.data;
         setErrorMessages([errorResponse?.message || "An error occurred during login."]);
@@ -58,57 +29,61 @@ const LoginPage = () => {
         setErrorMessages(["An unexpected error occurred."]);
       }
     }
-  };
+  }
+  const isFormValid = user.email.length && user.password.length;
   return (
-    <div className="h-screen flex items-center justify-center">
-      <div className="relative w-96 h-140 bg-cover bg-center rounded-lg shadow-xl overflow-hidden"
-        style={{ backgroundImage: "url('https://pexels.imgix.net/photos/27718/pexels-photo-27718.jpg?fit=crop&w=1280&h=823')" }}>
-<div className="absolute inset-0 bg-gradient-to-b from-red-500 via-red-600 to-blue-500 opacity-80"></div>
-        <div className="relative z-10 p-6 flex flex-col items-center">
-          <div className="text-4xl font-thin text-white mt-24 mb-4">Hello There!</div>
-          <div className="text-white text-sm font-light text-center mb-6">
-            Log in to enjoy your favorite dishes.
-          </div>
-          <div className="w-full mb-4">
-            <input
-              type="email"
-              placeholder="Email"
-              className="w-full px-4 py-2 border-b-2 border-white bg-transparent text-white focus:outline-none focus:border-white"
-              value={user.email}
-              onChange={handleEmailChange}
-            />
-          </div>
-          <div className="w-full mb-4 flex items-center border-b-2 border-white">
-            <input
-              type={isShow ? "text" : "password"}
-              placeholder="Password"
-              className="w-full px-4 py-2 bg-transparent text-white focus:outline-none focus:border-white"
-              value={user.password}
-              onChange={handlePasswordChange}
-            />
-            <div className="px-4 py-2 bg-transparent cursor-pointer" onClick={showimg}>
-              {isShow ? <Eye className="text-white" /> : <EyeOff className="text-white" />}
-            </div>
-          </div>
-          <div className="text-sm text-white mb-6">
-            or <span className="font-bold cursor-pointer" onClick={signUp}>Sign up</span>
-          </div>
-          <button
-            className={`w-full py-2 border-2 border-white text-white rounded-full hover:bg-white hover:text-gray-800 transition duration-300 ${background ? 'bg-black' : ''}`}
-            onClick={login} 
-          >
-            Log in
-          </button>
-          {errorMessages.length > 0 && (
-            <div className="mt-4 text-red-500">
-              {errorMessages.map((msg, index) => (
-                <p key={index}>{msg}</p>
-              ))}
-            </div>
-          )}
+    <div className="h-screen flex items-center justify-center bg-gray-100 text-gray-900">
+    <div className="relative z-10 p-8 bg-white rounded-lg shadow-lg w-96">
+      <h2 className="text-3xl font-semibold text-center mb-6">Welcome Back!</h2>
+      <p className="text-sm text-center mb-6">Log in to enjoy your favorite dishes.</p>
+      <Input
+        type="email"
+        name="email"
+        placeholder="Email"
+        className="w-full p-3 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
+        value={user.email}
+        onChange={handleChange}
+        
+      />
+      <div className="relative mb-6">
+        <Input
+          type={isShow ? "text" : "password"}
+          name="password"
+          placeholder="Password"
+          className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
+          value={user.password}
+          onChange={handleChange}
+        />
+        <div
+          className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+          onClick={showPassword}
+        >
+          {isShow ? <Eye className="text-gray-600" /> : <EyeOff className="text-gray-600" />}
         </div>
       </div>
+  
+      <p className="text-sm text-center mb-6">
+        or <span className="font-semibold text-blue-600 cursor-pointer" onClick={signUp}>Sign up</span>
+      </p>
+      <button
+        className={`w-full py-2 text-white rounded-md transition duration-300 ${isFormValid ? 'bg-black hover:bg-gray-700' : 'bg-gray-400 cursor-not-allowed'}`}
+        onClick={login}
+        disabled={!isFormValid}
+      >
+        Log in
+      </button>
+  
+      {/* Error Messages */}
+      {errorMessages.length > 0 && (
+        <div className="mt-4 text-red-500 text-center">
+          {errorMessages.map((msg, index) => (
+            <p key={index}>{msg}</p>
+          ))}
+        </div>
+      )}
     </div>
+  </div>
+  
   );
 };
 

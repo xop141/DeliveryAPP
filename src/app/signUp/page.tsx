@@ -1,8 +1,9 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Progress } from "@/components/ui/progress";
 import axios from 'axios';
+import { Input } from '@/components/ui/input';
 
 interface User {
   name: string;
@@ -41,7 +42,7 @@ const SignUp = () => {
     return emailRegex.test(email);
   };
 
-  const trackProgress = () => {
+  const trackProgress = useCallback(() => {
     let progressValue = 0;
 
     if (validateEmail(newUser.email)) progressValue += 25;
@@ -53,11 +54,11 @@ const SignUp = () => {
       ...newUser,
       progress: progressValue,
     });
-  };
+  }, [newUser.email, newUser.password, newUser.password2, newUser.name, newUser.phoneNumber]);
 
   useEffect(() => {
     trackProgress();
-  }, [newUser.email, newUser.password, newUser.password2, newUser.name, newUser.phoneNumber]);
+  }, [newUser.email, newUser.password, newUser.password2, newUser.name, newUser.phoneNumber, trackProgress]);
 
   const createAccount = async () => {
     const data = {
@@ -70,7 +71,6 @@ const SignUp = () => {
 
     try {
       const response = await axios.post('http://localhost:3030/user/signup', data);
-      console.log('User created successfully:', response.data);
       router.push('/login');
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -90,7 +90,7 @@ const SignUp = () => {
         <Progress value={newUser.progress} color="bg-gray-800" className="mb-4" />
 
         <div className="w-full mb-4">
-          <input
+          <Input
             type="text"
             placeholder="Username"
             className="w-full px-4 py-2 border-b-2 border-gray-800 bg-transparent text-gray-900 focus:outline-none focus:border-gray-900"
@@ -99,7 +99,7 @@ const SignUp = () => {
           />
         </div>
         <div className="w-full mb-4">
-          <input
+          <Input
             type="email"
             placeholder="Email"
             className="w-full px-4 py-2 border-b-2 border-gray-800 bg-transparent text-gray-900 focus:outline-none focus:border-gray-900"
@@ -108,7 +108,7 @@ const SignUp = () => {
           />
         </div>
         <div className="w-full mb-4">
-          <input
+          <Input
             type="text"
             placeholder="Phone number"
             className="w-full px-4 py-2 border-b-2 border-gray-800 bg-transparent text-gray-900 focus:outline-none focus:border-gray-900"
@@ -117,7 +117,7 @@ const SignUp = () => {
           />
         </div>
         <div className="w-full mb-4">
-          <input
+          <Input
             type="password"
             placeholder="Password"
             className="w-full px-4 py-2 border-b-2 border-gray-800 bg-transparent text-gray-900 focus:outline-none focus:border-gray-900"
@@ -126,7 +126,7 @@ const SignUp = () => {
           />
         </div>
         <div className="w-full mb-6">
-          <input
+          <Input
             type="password"
             placeholder="Repeat password"
             className="w-full px-4 py-2 border-b-2 border-gray-800 bg-transparent text-gray-900 focus:outline-none focus:border-gray-900"
